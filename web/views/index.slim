@@ -1,0 +1,13 @@
+.row.header
+  .col-sm-7
+    h3
+      = t('Workers')
+== erb :_workers
+- if workers_size > 0
+  .row
+    .col-sm-2.pull-right
+      |  <form action="
+      = root_path
+      | reset" method="post"> 
+      button.btn.btn-primary.btn-block[type="submit"]
+        = t('ClearWorkerList')
