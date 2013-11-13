@@ -42,11 +42,13 @@ $(function() {
     $($(this).attr('data-target')).toggle();
   });
 
+  var el = "#usage-graphs";
+  var queues = ['Email', 'SMS', 'Crawlers', 'Import'];
 
-  el = "#demo";
   var context = cubism.context()
-      .step(1e4)
-      .size(1440);
+      .step(1e3/2)
+      .size(1440)
+
   console.log(context)
 
   d3.select(el).selectAll(".axis")
@@ -60,18 +62,23 @@ $(function() {
       .call(context.rule());
 
   d3.select(el).selectAll(".horizon")
-      .data(d3.range(1, 10).map(random))
+      .data(queues.map(random))
     .enter().insert("div", ".bottom")
       .attr("class", "horizon")
-      .call(context.horizon().extent([-10, 10]));
+      .call(context.horizon().extent([-10, 10]).colors(["","","","","#eeeeee","#dddddd","#ccbbbb","#f2242f"]))
+      //.call(context.horizon().colors(['#eeeeee', '#eeeeee', '#dddddd', '#ff0000', '#eeeeee', '#eeeeee', '#dddddd', '#ff0000']))
+
+      ;
+
+
 
   context.on("focus", function(i) {
     d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
   });
 
   // Replace this with context.graphite and graphite.metric!
-  function random(x) {
-    console.log(x)
+  function random(label) {
+    console.log(label)
     var value = 0,
         values = [],
         i = 0,
@@ -81,11 +88,11 @@ $(function() {
       if (isNaN(last)) last = start;
       while (last < stop) {
         last += step;
-        value = Math.max(-10, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += x * .02)));
+        value = Math.max(0, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += 1.02)));
         values.push(value);
       }
       callback(null, values = values.slice((start - stop) / step));
-    }, x);
+    }, label);
   }
 
 });
