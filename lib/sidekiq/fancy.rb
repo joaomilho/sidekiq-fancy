@@ -5,7 +5,7 @@ require 'sinatra/base'
 require 'sidekiq'
 require 'sidekiq/api'
 require 'sidekiq/paginator'
-require 'sidekiq/web_helpers'
+require_relative 'fancy_helpers'
 
 module Sidekiq
   class Fancy < Sinatra::Base
@@ -16,7 +16,7 @@ module Sidekiq
     set :views, Proc.new { "#{root}/views" }
     set :locales, ["#{root}/locales"]
 
-    helpers WebHelpers
+    helpers FancyHelpers
 
     DEFAULT_TABS = {
       "Dashboard" => '',

@@ -2,7 +2,15 @@ require 'uri'
 
 module Sidekiq
   # This is not a public API
-  module WebHelpers
+  module FancyHelpers
+    def js(path)
+      %(<script src="/javascripts/#{path}.js" type="text/javascript"></script>)
+    end
+
+    def css(path)
+      %(<link href="/stylesheets/#{path}.css" media="screen" rel="stylesheet" type="text/css" />)
+    end
+
     def strings
       @@strings ||= begin
         # Allow sidekiq-web extensions to add locale paths
