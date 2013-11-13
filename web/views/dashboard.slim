@@ -1,9 +1,16 @@
 script type="text/javascript" src="#{root_path}javascripts/dashboard.js"
-h3
-  = t('Dashboard')
-  span.beacon
-    span.ring
-    span.dot
+br
+h1 = t('Dashboard')
+br
+section#usage-graphs
+section#summary
+  == slim :_summary
+
+section#workers
+  == erb :_workers
+
+
+
 h5
 #realtime
 h5

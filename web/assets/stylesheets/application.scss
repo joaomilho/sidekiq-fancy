@@ -11,14 +11,15 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #eee;
+  background-color: #fff;
   margin: 0 0 0 120px;
 }
 
-.summary_bar{
-  display: none;
-}
+// Grid
 
+section {
+  @include outer-container;
+}
 
 #body {
   position: relative;
@@ -26,21 +27,11 @@ body {
 
 nav {
   font-size: small;
-  /*left: 780px;*/
   position: absolute;
   width: 80px;
   left: 0;
   top: 0;
-  /*background: #333;*/
-  background: rgba(0,0,0,0.1);
 }
-
-nav ul{
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
 
 nav li{
   width: 80px;
@@ -49,9 +40,10 @@ nav li{
 nav li a{
   text-align: center;
   line-height: 80px;
-  /*padding: 30px 0;*/
   display: block;
   text-decoration: none;
+  background: rgba(0,0,0,0.1);
+
   /*text-shadow: 0 1px 1px rgba(0,0,0,0.4);*/
 }
 
@@ -59,6 +51,7 @@ nav li a{
 nav li a:hover{
   /*background: #111;*/
   text-decoration: none;
+  background: rgba(0,0,0,0);
 }
 
 
@@ -72,3 +65,28 @@ nav li a i.entypo{
 
 }
 
+// Summary
+
+#summary{
+  ul{
+    overflow: hidden;
+    /*border: 1px solid red;*/
+    /*background: rgba(0,0,0,0.01);*/
+    border: 1px solid #eee;
+    margin: $base-font-size*2 0;
+
+  }
+  li{
+    /*float: left;*/
+      @include span-columns(2);
+      text-align: center;
+    /*border-right: 1px solid #eee;*/
+
+    padding: $base-font-size 0;
+    .count{
+      font-size: $base-font-size * 2;
+      display: block;
+      color: #222;
+    }
+  }
+}
