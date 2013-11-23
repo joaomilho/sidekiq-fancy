@@ -1,0 +1,27 @@
+header.row
+  .col-sm-5
+    h3
+      == t('CurrentMessagesInQueue', :queue => @name)
+  .col-sm-4.pull-right
+    == slim :_paging, :locals => { :url => "#{root_path}queues/#{@name}" }
+table.queue.table.table-hover.table-bordered.table-striped
+  thead
+    th
+      = t('Class')
+    th[style="padding: 0 20px !important;"]
+      = t('Arguments')
+    th
+  - @messages.each_with_index do |msg, index|
+    tr
+      td
+        = msg['class']
+      td[width="100%;" style="padding: 0 20px !important;"]
+        == h(msg['args'])
+        /= Sidekiq.dump_json(msg)
+        /hr
+        /== Sidekiq.dump_json(msg)
+      td
+        form action="#{root_path}queues/#{@name}/delete" method="post"
+          input name="key_val" value='#{{h Sidekiq.dump_json(msg)}}' type="hidden"
+          input class="btn" type="submit" name="delete" value="#{t('Delete')}" data-confirm="#{t('AreYouSure')}"
+== slim :_paging, :locals => { :url => "#{root_path}queues/#{@name}" }

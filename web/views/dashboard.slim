@@ -3,8 +3,14 @@ br
 h1 = t('Dashboard')
 br
 section#usage-graphs
+  - @queues.each do |queue|
+    .queue[data-name=queue.name]
+
 section#summary
   == slim :_summary
+
+/section#queues
+  /== slim :_queues
 
 section#workers
   == erb :_workers
@@ -13,7 +19,8 @@ section#workers
 
 h5
 #realtime
-h5
+
+/h5
   span.history-heading
     = t('History')
   |  <a href="
@@ -47,10 +54,10 @@ h5
 | " data-update-url="
 = root_path
 | dashboard/stats">
-br
-h5
+/br
+/h5
   | Redis
-.redis-wrapper
+/.redis-wrapper
   .stats-container
     - if @redis_info.fetch("redis_version", nil)
       .stat

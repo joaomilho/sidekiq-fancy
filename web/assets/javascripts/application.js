@@ -43,7 +43,16 @@ $(function() {
   });
 
   var el = "#usage-graphs";
-  var queues = ['Email', 'SMS', 'Crawlers', 'Import'];
+  var queues = []
+    //'Email', 'SMS', 'Crawlers', 'Import'];
+  $(el).find('.queue').map(function(){
+    //console.log("IIIII", i, el)
+    queues.push($(this).data('name'));
+  });
+  //alert(qs)
+  //alert(queues);
+  //console.log("qs1", $(el).find('.queue'))
+  //console.log("qs", qs)
 
   var context = cubism.context()
       .step(1e3/2)
