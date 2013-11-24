@@ -1,0 +1,40 @@
+table.workers.table.table-hover.table-bordered.table-striped.table-white
+  thead
+    th
+      = t('Worker')
+    th
+      = t('Queue')
+    th
+      = t('Class')
+    th
+      = t('Arguments')
+    th
+      = t('Started')
+  - workers.each_with_index do |(worker, msg), index|
+    tr
+      td
+        = worker
+      td
+        |  <a href="
+        = root_path
+        | queues/
+        = msg['queue']
+        | ">
+        = msg['queue']
+      td
+        = msg['payload']['class']
+      td
+        - if msg['payload']['args'].to_s.size > 100
+          = h(msg['payload']['args'].inspect[0..100]) + "... "
+          |  <button data-toggle="collapse" data-target="#worker_
+          = index
+          | " class="btn btn-default btn-xs">
+          = t('ShowAll')
+          |  <div class="toggle" id="worker_
+          = index
+          | " style="display: none;max-width: 750px;">
+          = h(msg['payload']['args'])
+        - else
+          = h(msg['payload']['args'])
+      td
+        = relative_time(msg['run_at'].is_a?(Numeric) ? Time.at(msg['run_at']) : Time.parse(msg['run_at']))

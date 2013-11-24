@@ -2,23 +2,21 @@ script type="text/javascript" src="#{root_path}javascripts/dashboard.js"
 br
 h1 = t('Dashboard')
 br
+section#summary
+  == slim :_summary
+
 section#usage-graphs
   - @queues.each do |queue|
     .queue[data-name=queue.name]
 
-section#summary
-  == slim :_summary
 
 /section#queues
   /== slim :_queues
 
-section#workers
-  == erb :_workers
+.row
+  section#workers
+    == slim :_workers
 
-
-
-h5
-#realtime
 
 /h5
   span.history-heading

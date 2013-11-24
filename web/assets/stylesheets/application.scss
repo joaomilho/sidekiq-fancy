@@ -15,7 +15,12 @@ body {
   background-color: white;
   margin: 0 0 0 50px;
 }
-
+.row{
+  @include outer-container;
+  section{
+    @include span-columns(6);
+  }
+}
 h3{
   font-weight: normal;
 

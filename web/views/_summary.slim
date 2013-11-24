@@ -1,17 +1,4 @@
 ul
-  li.enqueued
-    |  <a href="
-    = root_path
-    | queues"> 
-    span.count
-      = number_with_delimiter(stats.enqueued)
-    span.desc
-      = t('Enqueued')
-  li.processed
-    span.count
-      = number_with_delimiter(stats.processed)
-    span.desc
-      = t('Processed')
   li.scheduled
     |  <a href="
     = root_path
@@ -20,6 +7,14 @@ ul
       = number_with_delimiter(stats.scheduled_size)
     span.desc
       = t('Scheduled')
+  li.enqueued
+    |  <a href="
+    = root_path
+    | queues"> 
+    span.count
+      = number_with_delimiter(stats.enqueued)
+    span.desc
+      = t('Enqueued')
   li.busy
     |  <a href="
     = root_path
@@ -28,11 +23,12 @@ ul
       = number_with_delimiter(workers_size)
     span.desc
       = t('Busy')
-  li.failed
+
+  li.processed
     span.count
-      = number_with_delimiter(stats.failed)
+      = number_with_delimiter(stats.processed)
     span.desc
-      = t('Failed')
+      = t('Processed')
   li.retries
     |  <a href="
     = root_path
@@ -41,3 +37,9 @@ ul
       = number_with_delimiter(stats.retry_size)
     span.desc
       = t('Retries')
+  li.failed
+    span.count
+      = number_with_delimiter(stats.failed)
+    span.desc
+      = t('Failed')
+
