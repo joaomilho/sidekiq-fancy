@@ -54,6 +54,8 @@ $(function() {
   //console.log("qs1", $(el).find('.queue'))
   //console.log("qs", qs)
 
+  var colors = ["","","","","rgba(0,0,0,0.05)","rgba(50,0,0,0.1)","rgba(150,0,0,0.2)","rgba(250,0,0,0.5"];
+
   var context = cubism.context()
       .step(1e3/2)
       .size(1440)
@@ -74,7 +76,7 @@ $(function() {
       .data(queues.map(random))
     .enter().insert("div", ".bottom")
       .attr("class", "horizon")
-      .call(context.horizon().extent([-10, 10]).colors(["","","","","#eeeeee","#dddddd","#ccbbbb","#f2242f"]))
+      .call(context.horizon().extent([-10, 10]).colors(colors))
       //.call(context.horizon().colors(['#eeeeee', '#eeeeee', '#dddddd', '#ff0000', '#eeeeee', '#eeeeee', '#dddddd', '#ff0000']))
 
       ;

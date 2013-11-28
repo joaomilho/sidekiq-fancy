@@ -2,23 +2,30 @@
 
 
 * {
-  box-sizing: border-box;
+  /*box-sizing: border-box;*/
 }
 
+h1{
+  margin: 0 0 0 100px;
+  line-height: 80px;
+  /*background: red;*/
+
+}
 
 body {
   color: #585454;
   padding: 0;
+  margin: 0;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: white;
-  margin: 0 0 0 50px;
+  background-color: #f5f4ea;
+  /*margin: 0 0 0 100px;*/
 }
 .row{
-  @include outer-container;
+  /*@include outer-container;*/
   section{
-    @include span-columns(6);
+    /*@include span-columns(6);*/
   }
 }
 h3{
@@ -33,7 +40,7 @@ h3{
 // Grid
 
 section {
-  @include outer-container;
+  /*@include outer-container;*/
 }
 
 #body {
@@ -46,29 +53,32 @@ nav {
   width: 80px;
   left: 0;
   top: 0;
+  li{
+    width: 80px;
+    display: none;
+    &:first-child{
+      display: block;
+    }
+    a{
+      text-align: center;
+      line-height: 80px;
+      display: block;
+      text-decoration: none;
+      /*background: rgba(0,0,0,0.1);*/
+
+      /*text-shadow: 0 1px 1px rgba(0,0,0,0.4);*/
+      &:hover{
+        /*background: #111;*/
+        text-decoration: none;
+        background: rgba(0,0,0,0.1);
+
+        /*background: rgba(0,0,0,0.3);*/
+      }
+
+    }
+
+  }
 }
-
-nav li{
-  width: 80px;
-}
-
-nav li a{
-  text-align: center;
-  line-height: 80px;
-  display: block;
-  text-decoration: none;
-  background: rgba(0,0,0,0.1);
-
-  /*text-shadow: 0 1px 1px rgba(0,0,0,0.4);*/
-}
-
-
-nav li a:hover{
-  /*background: #111;*/
-  text-decoration: none;
-  background: rgba(0,0,0,0);
-}
-
 
 nav li a i.entypo{
   line-height: 80px;
@@ -81,27 +91,32 @@ nav li a i.entypo{
 }
 
 // Summary
-
 #summary{
+  /*background: rgba(0,0,0,0.01);*/
   ul{
     overflow: hidden;
     /*border: 1px solid red;*/
     /*background: rgba(0,0,0,0.01);*/
-    border: 1px solid #eee;
+    /*border: 1px solid #eee;*/
     margin: $base-font-size*2 0;
 
   }
   li{
+
     /*float: left;*/
       @include span-columns(2);
       text-align: center;
     /*border-right: 1px solid #eee;*/
-
-    padding: $base-font-size 0;
+    /*padding: $base-font-size 0;*/
     .count{
       font-size: $base-font-size * 2;
       display: block;
       color: #222;
+    }
+    a{
+      color: rgba(0,0,0,0.4) !important;
+      font-size: 14px;
+      text-transform: lowercase;
     }
   }
 }
