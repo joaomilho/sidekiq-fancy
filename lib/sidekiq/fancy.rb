@@ -1,6 +1,9 @@
+require 'sinatra/base'
+
 require 'slim'
 require 'yaml'
-require 'sinatra/base'
+require 'sass'
+require 'coffee-script'
 
 require 'sidekiq'
 require 'sidekiq/api'
@@ -8,33 +11,29 @@ require 'sidekiq/paginator'
 require_relative 'fancy_helpers'
 
 module Sidekiq
+
+
   class Fancy < Sinatra::Base
     include Sidekiq::Paginator
 
     set :root, File.expand_path(File.dirname(__FILE__) + "/../../web")
     set :public_folder, Proc.new { "#{root}/assets" }
     set :views, Proc.new { "#{root}/views" }
+
     set :locales, ["#{root}/locales"]
 
     helpers FancyHelpers
 
-    DEFAULT_TABS = {
-      "Dashboard" => '',
-      "Workers"   => 'workers',
-      "Queues"    => 'queues',
-      "Retries"   => 'retries',
-      "Scheduled" => 'scheduled',
-    }
-
     class << self
-      def default_tabs
-        DEFAULT_TABS
-      end
-
       def custom_tabs
         @custom_tabs ||= {}
       end
       alias_method :tabs, :custom_tabs
+    end
+
+    get "/js/*.js" do
+      filename = params[:splat].first
+      coffee filename.to_sym
     end
 
     get "/workers" do

@@ -98,9 +98,10 @@ nav li a i.entypo{
     /*border: 1px solid red;*/
     /*background: rgba(0,0,0,0.01);*/
     /*border: 1px solid #eee;*/
-    margin: $base-font-size*2 0;
-
+    /*margin: font-size*2 0;*/
+    margin: 0 40px 40px 40px;
   }
+
   li{
 
     /*float: left;*/
@@ -108,6 +109,9 @@ nav li a i.entypo{
       text-align: center;
     /*border-right: 1px solid #eee;*/
     /*padding: $base-font-size 0;*/
+    border: 10px solid #ccc;
+    border-radius: 100px;
+    line-height: 80px;
     .count{
       font-size: $base-font-size * 2;
       display: block;

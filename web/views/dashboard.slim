@@ -1,9 +1,13 @@
-script type="text/javascript" src="#{root_path}javascripts/dashboard.js"
+
+script type="text/javascript" src="#{root_path}javascripts/CustomTooltip.js"
+
+script type="text/javascript" src="#{root_path}js/bubble_chart.js"
 h1 = t('Dashboard')
 br
-section#summary
+/section#summary
   == slim :_summary
 
+#vis
 section#usage-graphs
   - @queues.each do |queue|
     .queue[data-name=queue.name]
@@ -12,7 +16,7 @@ section#usage-graphs
 /section#queues
   /== slim :_queues
 
-.row
+/.row
   section#workers
     == slim :_workers
 
