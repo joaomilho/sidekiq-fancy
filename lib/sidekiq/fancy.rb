@@ -12,7 +12,6 @@ require_relative 'fancy_helpers'
 
 module Sidekiq
 
-
   class Fancy < Sinatra::Base
     include Sidekiq::Paginator
 
@@ -34,6 +33,10 @@ module Sidekiq
     get "/js/*.js" do
       filename = params[:splat].first
       coffee filename.to_sym
+    end
+
+    get '/jobs.csv' do
+      erb :jobs
     end
 
     get "/workers" do
