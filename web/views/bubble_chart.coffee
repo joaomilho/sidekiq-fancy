@@ -1,10 +1,12 @@
 class BubbleChart
   constructor: (data) ->
     @data = data
-    @width = $(window).width()
-    @height = 600
+    @width = $(window).innerWidth() - 250;
+    @height = $(window).innerHeight()
 
-    @tooltip = CustomTooltip("tooltip", 0)
+    @inspector = $('#inspector')
+    @inspector.height( @height );
+    #@tooltip = CustomTooltip("tooltip", 0)
 
     # locations the nodes will move towards
     # depending on which view is currently being
@@ -19,38 +21,54 @@ class BubbleChart
 
     # used when setting up force and
     # moving around nodes
-    @layout_gravity = -0.07
+    @layout_gravity = -0.04
     @damper = 0.1
 
-    # these will be set in create_nodes and create_vis
-    @vis = null
+    # these will be set in create_nodes and create_bubbles
+    @bubbles = null
+
     @nodes = []
     @force = null
     @circles = null
     @statuses = null
 
-    # nice looking colors - no reason to buck the trend
-    @fill_color = d3.scale.ordinal()
-      .domain(["enqueued", "busy", "success", "failed"])
-      .range(["rgba(200,200,200,0.5)", "rgba(200,200,0,0.5)", "rgba(90,200,90,0.7)", "rgba(200,90,90,0.7)"])
-
     @radius = 4+(@width*@height) / Math.pow(@data.length, 3)
 
     @status_nodes = [
-      {id: -1, radius: 50, status: 'enqueued', x: @status_centers['enqueued']['x'], y: @status_centers['enqueued']['y']},
-      {id: -2, radius: 50, status: 'busy', x: @status_centers['busy']['x'], y: @status_centers['busy']['y']},
-      {id: -3, radius: 50, status: 'success', x: @status_centers['success']['x'], y: @status_centers['success']['y']},
-      {id: -4, radius: 50, status: 'failed', x: @status_centers['failed']['x'], y: @status_centers['failed']['y']}
+      {type: 'label', id: -1, radius: 36, status: 'enqueued', x: @status_centers['enqueued']['x'], y: @status_centers['enqueued']['y']},
+      {type: 'label', id: -2, radius: 36, status: 'busy', x: @status_centers['busy']['x'], y: @status_centers['busy']['y']},
+      {type: 'label', id: -3, radius: 36, status: 'success', x: @status_centers['success']['x'], y: @status_centers['success']['y']},
+      {type: 'label', id: -4, radius: 36, status: 'failed', x: @status_centers['failed']['x'], y: @status_centers['failed']['y']}
     ]
 
     this.create_nodes()
-    this.create_vis()
+    this.create_bubbles()
+    setTimeout(this.move_one, 500)
+
+  move_one: () =>
+    console.log("UPD!")
+    for num in [1..2]
+      node = @nodes[parseInt(Math.random()*1000)]
+      if node.status == 'enqueued'
+        node.status = 'busy'
+      else if node.status == 'busy'
+        node.status = ['failed', 'success'][parseInt(Math.random()*2)]
+
+    @all_gs = @bubbles.selectAll("g")
+      .data(@nodes, (d) -> d.id)
+
+    @gs.selectAll("circle.job")
+        .attr("class", (d) => d.type + " " + d.status)
+
+    @display_by_status()
+    setTimeout(this.move_one, 500)
 
   # create node objects from original data
   # that will serve as the data behind each
-  # bubble in the vis, then add each node
+  # bubble in the bubbles, then add each node
   # to @nodes to be used later
   create_nodes: () =>
+    @counts = {}
     @data.forEach (d) =>
       node =
         id: d.id
@@ -59,31 +77,59 @@ class BubbleChart
         worker: d.worker
         params: d.params
         status: d.status
+        type: 'job'
+      @counts[d.status] ?= 0
+      @counts[d.status]++
       @nodes.push node
-    #alert(@status_nodes)
+
     @status_nodes.forEach (node) =>
       @nodes.push node
 
-
-    #alert(@nodes)
-    #@nodes.forEach ->
-
-
-  # create svg at #vis and then
-  # create circle representation for each node
-  create_vis: () =>
-    @vis = d3.select("#vis").append("svg")
+  create_bubbles: () =>
+    @bubbles = d3.select("#bubbles").append("svg")
+      .attr("class", "bubbles")
       .attr("width", @width)
       .attr("height", @height)
-      .attr("id", "svg_vis")
+      #.attr("id", "svg_bubbles")
 
-
-    @circles = @vis.selectAll("circle")
+    @all_gs = @bubbles.selectAll("g")
       .data(@nodes, (d) -> d.id)
-    #@statuses = @vis.selectAll("text")
+    #@statuses = @bubbles.selectAll("text")
       #.data(@status_nodes, (d) -> d.status)
 
+    @gs = @all_gs.enter().append("g")
+      .attr("class", (d) => d.type)
 
+    @circles = @gs
+      .append("circle")
+        .attr("r", (d) => d.radius)
+        .attr("class", (d) => d.type)
+
+    @gs.selectAll("circle.job")
+        .attr("class", (d) => d.type + " " + d.status)
+        #.attr("stroke-width", 2)
+        #.attr("stroke", (d) => 'rgba(0,0,0,0.01)')
+        .attr("id", (d) -> "bubble_#{d.id}")
+        .on("mouseover", (d,i) -> that.show_details(d,i,this))
+        .on("mouseout", (d,i) -> that.hide_details(d,i,this))
+
+    @texts = @gs.filter('.label').append("text")
+      .text((d) => d.status)
+      .attr("text-anchor", "middle")
+      #.attr("fill", "rgba(0,0,0,0.6)")
+      .attr("y", 20)
+
+    @texts = @gs.filter('.label').append("text")
+      .attr("class", "count")
+      .text((d) => @counts[d.status])
+      .attr("text-anchor", "middle")
+      #.attr("fill", "rgba(0,0,0,0.6)")
+      .attr("y", 0)
+
+      #.attr("x", (d) => @status_centers[d.status]['x'] )
+      #.attr("y", (d) => @status_centers[d.status]['y'] )
+
+    #@circles.push circle
 
     # used because we need 'this' in the
     # mouse callbacks
@@ -91,20 +137,19 @@ class BubbleChart
 
     # radius will be set to 0 initially.
     # see transition below
-    @circles.enter()
-      #.append("g")
-      .append("circle")
-        .attr("r", 0)
-        .attr("fill", (d) => @fill_color(d.status))
-        .attr("stroke-width", 2)
-        .attr("stroke", (d) => 'rgba(0,0,0,0.05)')
-        #.attr("id", (d) -> "bubble_#{d.id}")
-        .on("mouseover", (d,i) -> that.show_details(d,i,this))
-        .on("mouseout", (d,i) -> that.hide_details(d,i,this))
-        .append("text")
-          .text("h")
-          .attr("text-anchor", "middle")
-          .attr("stroke", (d) => 'rgba(0,0,0,0.05)')
+    #@circles.enter()
+      #.append("circle")
+        #.attr("r", 0)
+        #.attr("fill", (d) => @fill_color(d.status))
+        #.attr("stroke-width", 2)
+        #.attr("stroke", (d) => 'rgba(0,0,0,0.05)')
+        ##.attr("id", (d) -> "bubble_#{d.id}")
+        #.on("mouseover", (d,i) -> that.show_details(d,i,this))
+        #.on("mouseout", (d,i) -> that.hide_details(d,i,this))
+        #.append("text")
+          #.text("h")
+          #.attr("text-anchor", "middle")
+          #.attr("stroke", (d) => 'rgba(0,0,0,0.05)')
 
 
     #@circles.enter().append("text")
@@ -116,7 +161,7 @@ class BubbleChart
 
     # Fancy transition to make bubbles appear, ending with the
     # correct radius
-    @circles.transition().duration(1000).attr("r", (d) -> d.radius)
+    #@gs.transition().duration(1000).attr("r", (d) -> d.radius)
 
 
   # Charge function that is called for each node.
@@ -166,10 +211,13 @@ class BubbleChart
       .charge(this.charge)
       .friction(0.9)
       .on "tick", (e) =>
-        @circles.each(this.move_towards_status(e.alpha))
-          .attr("cx", (d) -> d.x)
-          .attr("cy", (d) -> d.y)
-        #@statuses.each(this.move_text_towards_status(e.alpha))
+        @gs.each(this.move_towards_status(e.alpha))
+          .attr("x", (d) -> d.x)
+          .attr("y", (d) -> d.y)
+          .attr "transform", (d) =>
+            "translate("+d.x+","+d.y+")"
+
+        #@texts.each(this.move_towards_status(e.alpha))
           #.attr("x", (d) -> d.x)
           #.attr("y", (d) -> d.y)
 
@@ -202,16 +250,20 @@ class BubbleChart
 
 
   hide_statuses: () =>
-    status = @vis.selectAll(".status").remove()
+    status = @bubbles.selectAll(".status").remove()
 
   show_details: (data, i, element) =>
     d3.select(element).attr("stroke", "rgba(0,0,0,0.3)")
-    content ="<span class=\"name\">Queue:</span><span class=\"value\"> #{data.queue}</span><br/>"
-    content += "<span class=\"name\">Worker:</span><span class=\"value\"> #{data.worker}</span><br/>"
-    content +="<span class=\"name\">Params:</span><span class=\"value\"> #{data.params}</span><br/>"
+    content = "<dl>" +
+                "<dt>Queue:</dt><dd> #{data.queue}</dd>" +
+                "<dt>Worker:</dt><dd> #{data.worker}</dd>" +
+                "<dt>Status:</dt><dd> #{data.status}</dd>" +
+                "<dt>Params:</dt><dd> #{data.params}</dd>" +
+              "</dl>"
 
+    @inspector.html(content)
     #content +="<span class=\"name\">Amount:</span><span class=\"value\"> $#{data.value}</span><br/>"
-    @tooltip.showTooltip(content,d3.event)
+    #@tooltip.showTooltip(content,d3.event)
 
 
   hide_details: (data, i, element) =>

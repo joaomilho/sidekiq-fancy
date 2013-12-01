@@ -42,68 +42,9 @@ $(function() {
     $($(this).attr('data-target')).toggle();
   });
 
-  var el = "#usage-graphs";
-  var queues = []
-    //'Email', 'SMS', 'Crawlers', 'Import'];
-  $(el).find('.queue').map(function(){
-    //console.log("IIIII", i, el)
-    queues.push($(this).data('name'));
-  });
-  //alert(qs)
-  //alert(queues);
-  //console.log("qs1", $(el).find('.queue'))
-  //console.log("qs", qs)
-
-  var colors = ["","","","","rgba(0,0,0,0.05)","rgba(50,0,0,0.1)","rgba(150,0,0,0.2)","rgba(250,0,0,0.5"];
-
-  var context = cubism.context()
-      .step(1e3/2)
-      .size(1440)
-
-  console.log(context)
-
-  d3.select(el).selectAll(".axis")
-      .data(["top", "bottom"])
-    .enter().append("div")
-      .attr("class", function(d) { return d + " axis"; })
-      .each(function(d) { d3.select(this).call(context.axis().ticks(12).orient(d)); });
-
-  d3.select(el).append("div")
-      .attr("class", "rule")
-      .call(context.rule());
-
-  d3.select(el).selectAll(".horizon")
-      .data(queues.map(random))
-    .enter().insert("div", ".bottom")
-      .attr("class", "horizon")
-      .call(context.horizon().extent([-10, 10]).colors(colors))
-      //.call(context.horizon().colors(['#eeeeee', '#eeeeee', '#dddddd', '#ff0000', '#eeeeee', '#eeeeee', '#dddddd', '#ff0000']))
-
-      ;
 
 
-
-  context.on("focus", function(i) {
-    d3.selectAll(".value").style("right", i == null ? null : context.size() - i + "px");
-  });
-
-  // Replace this with context.graphite and graphite.metric!
-  function random(label) {
-    console.log(label)
-    var value = 0,
-        values = [],
-        i = 0,
-        last;
-    return context.metric(function(start, stop, step, callback) {
-      start = +start, stop = +stop;
-      if (isNaN(last)) last = start;
-      while (last < stop) {
-        last += step;
-        value = Math.max(0, Math.min(10, value + .8 * Math.random() - .4 + .2 * Math.cos(i += 1.02)));
-        values.push(value);
-      }
-      callback(null, values = values.slice((start - stop) / step));
-    }, label);
-  }
-
+  $('#open-menu').click(function(){
+    $(this).parents('ul').toggleClass('open')
+  })
 });

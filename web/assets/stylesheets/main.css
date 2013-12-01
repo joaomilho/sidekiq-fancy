@@ -664,7 +664,6 @@ svg {
   font-family: 'EntypoRegular';
   font-size: 48px;
   font-weight: normal;
-  /*line-height: 0;*/
   font-style: normal; }
 
 .entypo.phone:before {
@@ -1386,8 +1385,67 @@ svg {
 
 h1 {
   margin: 0 0 0 100px;
-  line-height: 80px;
-  /*background: red;*/ }
+  line-height: 80px; }
+
+#inspector {
+  width: 300px;
+  background: rgba(0, 0, 0, 0.1);
+  /*float: right;*/
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 20px; }
+  #inspector .dt {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 0.8em; }
+  #inspector .dd {
+    font-weight: bold; }
+
+i.entypo.plus:before {
+  display: block;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  transition: all 0.5s ease; }
+
+ul.open i.entypo.plus:before {
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  transform: rotate(45deg); }
+
+svg.bubbles {
+  position: absolute;
+  top: 0;
+  font-family: Raleway;
+  /*font-weight: bold;*/ }
+  svg.bubbles circle {
+    fill: transparent;
+    -webkit-transition: fill 6s ease;
+    -moz-transition: fill 6s ease;
+    transition: fill 6s ease; }
+    svg.bubbles circle.job {
+      stroke-width: 2px;
+      stroke: rgba(0, 0, 0, 0.01); }
+      svg.bubbles circle.job:hover {
+        stroke: rgba(0, 0, 0, 0.5); }
+    svg.bubbles circle.enqueued {
+      fill: rgba(200, 200, 200, 0.5); }
+    svg.bubbles circle.busy {
+      fill: rgba(200, 200, 0, 0.5); }
+    svg.bubbles circle.success {
+      fill: rgba(90, 200, 90, 0.7); }
+    svg.bubbles circle.failed {
+      fill: rgba(200, 90, 90, 0.7); }
+  svg.bubbles text {
+    /*position: relative;*/
+    fill: rgba(0, 0, 0, 0.4);
+    font-size: 13px;
+    /*top: 10px;*/ }
+  svg.bubbles text.count {
+    fill: rgba(0, 0, 0, 0.7);
+    font-size: 32px;
+    /*top: 0;*/ }
 
 body {
   color: #585454;
@@ -1416,29 +1474,79 @@ section {
 #body {
   position: relative; }
 
+svg {
+  z-index: 5; }
+
 nav {
   font-size: small;
   position: absolute;
-  width: 80px;
+  z-index: 99;
   left: 0;
   top: 0; }
-  nav li {
-    width: 80px;
-    display: none; }
-    nav li:first-child {
-      display: block; }
-    nav li a {
-      text-align: center;
-      line-height: 80px;
-      display: block;
-      text-decoration: none;
-      /*background: rgba(0,0,0,0.1);*/
-      /*text-shadow: 0 1px 1px rgba(0,0,0,0.4);*/ }
-      nav li a:hover {
-        /*background: #111;*/
+  nav ul {
+    overflow: hidden; }
+    nav ul.open {
+      width: 320px !important;
+      /*height: 80px;*/ }
+      nav ul.open li {
+        opacity: 1; }
+        nav ul.open li:first-child {
+          background: rgba(0, 0, 0, 0.1);
+          line-height: 60px; }
+        nav ul.open li:nth-child(2) {
+          background: white;
+          -webkit-transform: translateX(80px);
+          -moz-transform: translateX(80px);
+          -ms-transform: translateX(80px);
+          -o-transform: translateX(80px);
+          transform: translateX(80px); }
+        nav ul.open li:nth-child(3) {
+          background: white;
+          -webkit-transform: translateX(160px);
+          -moz-transform: translateX(160px);
+          -ms-transform: translateX(160px);
+          -o-transform: translateX(160px);
+          transform: translateX(160px); }
+        nav ul.open li:nth-child(4) {
+          background: white;
+          -webkit-transform: translateX(240px);
+          -moz-transform: translateX(240px);
+          -ms-transform: translateX(240px);
+          -o-transform: translateX(240px);
+          transform: translateX(240px); }
+    nav ul li {
+      width: 80px;
+      /*display: none;*/
+      position: absolute;
+      /*visibility: hidden;*/
+      -webkit-transition: all 0.5s ease;
+      -moz-transition: all 0.5s ease;
+      transition: all 0.5s ease;
+      -webkit-transform: translateX(0px);
+      -moz-transform: translateX(0px);
+      -ms-transform: translateX(0px);
+      -o-transform: translateX(0px);
+      transform: translateX(0px);
+      z-index: 11;
+      opacity: 0;
+      /*float: left;*/ }
+      nav ul li:first-child {
+        /*display: block;*/
+        /*visibility: visible;*/
+        z-index: 12;
+        opacity: 1; }
+      nav ul li a {
+        text-align: center;
+        line-height: 80px;
+        display: block;
         text-decoration: none;
-        background: rgba(0, 0, 0, 0.1);
-        /*background: rgba(0,0,0,0.3);*/ }
+        /*background: rgba(0,0,0,0.1);*/
+        /*text-shadow: 0 1px 1px rgba(0,0,0,0.4);*/ }
+        nav ul li a:hover {
+          /*background: #111;*/
+          text-decoration: none;
+          background: rgba(0, 0, 0, 0.1);
+          /*background: rgba(0,0,0,0.3);*/ }
 
 nav li a i.entypo {
   line-height: 80px;

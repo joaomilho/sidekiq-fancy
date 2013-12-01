@@ -39,6 +39,12 @@ module Sidekiq
       erb :jobs
     end
 
+    get "/time_series" do
+      @queues = Sidekiq::Queue.all
+
+      slim :time_series
+    end
+
     get "/workers" do
       slim :index
     end
