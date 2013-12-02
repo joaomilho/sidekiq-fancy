@@ -44,7 +44,7 @@ $(function() {
 
 
 
-  $('#open-menu').click(function(){
-    $(this).parents('ul').toggleClass('open')
+  $('nav ul').hover(function(){
+    $(this).toggleClass('open')
   })
 });

@@ -32,7 +32,7 @@ class BubbleChart
     @circles = null
     @statuses = null
 
-    @radius = 4+(@width*@height) / Math.pow(@data.length, 3)
+    @radius = 6+(@width*@height) / Math.pow(@data.length, 3)
 
     @status_nodes = [
       {type: 'label', id: -1, radius: 36, status: 'enqueued', x: @status_centers['enqueued']['x'], y: @status_centers['enqueued']['y']},

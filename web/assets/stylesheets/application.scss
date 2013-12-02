@@ -33,7 +33,7 @@ i.entypo.plus:before{
 
 ul.open{
   i.entypo.plus:before{
-    @include transform(rotate(45deg));
+    @include transform(rotate(135deg));
   }
 }
 
@@ -130,28 +130,27 @@ nav {
     overflow: hidden;
 
     &.open{
-      width: 320px !important;
+      /*width: 320px !important;*/
       /*height: 80px;*/
 
       li{
         opacity: 1;
+        a{
+          background: white;
+        }
 
         &:first-child{
           background: rgba(0,0,0,0.1);
           line-height: 60px;
         }
         &:nth-child(2){
-
-          background: white;
-          @include transform(translateX(80px));
+          @include transform(translateY(80px));
         }
         &:nth-child(3){
-          background: white;
-          @include transform(translateX(160px));
+          @include transform(translateY(160px));
         }
         &:nth-child(4){
-          background: white;
-          @include transform(translateX(240px));
+          @include transform(translateY(240px));
         }
       }
     }
@@ -159,12 +158,13 @@ nav {
     li{
 
       width: 80px;
+      height: 80px;
       /*display: none;*/
       position: absolute;
       /*visibility: hidden;*/
       @include transition(all 0.5s ease);
 
-      @include transform(translateX(0px));
+      @include transform(translateY(0px));
       z-index: 11;
       opacity: 0;
 
@@ -180,6 +180,8 @@ nav {
         text-align: center;
 
         line-height: 80px;
+        height: 80px;
+
         display: block;
         text-decoration: none;
         /*background: rgba(0,0,0,0.1);*/
