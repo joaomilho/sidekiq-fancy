@@ -1,4 +1,4 @@
-worker,id,params,queue,status
+worker,id,params,queue,worker,status
 <% 1_000.times do |i| %>
-  TestWorker,<%= i %>,"[1,2,'a']",<%= %w[test email sms import].sample %>,<%= %w[enqueued enqueued enqueued enqueued busy busy success failed].sample %>
+  TestWorker,<%= i %>,"[1,2,'a']",<%= %w[test email sms import].sample %>,<%= %w[w1 w2 w3 w4].sample %>,<%= %w[enqueued enqueued enqueued enqueued busy busy success failed].sample %>
 <% end %>

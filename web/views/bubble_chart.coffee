@@ -26,7 +26,7 @@ class BubbleChart
 
     # these will be set in create_nodes and create_bubbles
     @bubbles = null
-
+    @workers = []
     @nodes = []
     @force = null
     @circles = null
@@ -46,7 +46,6 @@ class BubbleChart
     setTimeout(this.move_one, 500)
 
   move_one: () =>
-    console.log("UPD!")
     for num in [1..2]
       node = @nodes[parseInt(Math.random()*1000)]
       if node.status == 'enqueued'
@@ -70,6 +69,8 @@ class BubbleChart
   create_nodes: () =>
     @counts = {}
     @data.forEach (d) =>
+      @workers.push(d.worker) unless d.worker in @workers
+
       node =
         id: d.id
         radius: @radius
@@ -82,6 +83,7 @@ class BubbleChart
       @counts[d.status]++
       @nodes.push node
 
+    console.log('workers', @workers)
     @status_nodes.forEach (node) =>
       @nodes.push node
 
