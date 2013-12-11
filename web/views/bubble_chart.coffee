@@ -12,12 +12,6 @@ class BubbleChart
     # depending on which view is currently being
     # used
     @center = {x: @width / 2, y: @height / 2}
-    @status_centers = {
-      "enqueued": {x: @width / 3, y: @height / 2},
-      "busy": {x: @width / 2, y: @height / 2},
-      "success": {x: 2 * @width / 3, y: (@height / 8) * 3.5},
-      "failed": {x: 2 * @width / 3, y: (@height / 8) * 4.5}
-    }
 
     # used when setting up force and
     # moving around nodes
@@ -33,13 +27,6 @@ class BubbleChart
     @statuses = null
 
     @radius = 6+(@width*@height) / Math.pow(@data.length, 3)
-
-    @status_nodes = [
-      {type: 'label', id: -1, radius: 36, status: 'enqueued', x: @status_centers['enqueued']['x'], y: @status_centers['enqueued']['y']},
-      {type: 'label', id: -2, radius: 36, status: 'busy', x: @status_centers['busy']['x'], y: @status_centers['busy']['y']},
-      {type: 'label', id: -3, radius: 36, status: 'success', x: @status_centers['success']['x'], y: @status_centers['success']['y']},
-      {type: 'label', id: -4, radius: 36, status: 'failed', x: @status_centers['failed']['x'], y: @status_centers['failed']['y']}
-    ]
 
     this.create_nodes()
     this.create_bubbles()
@@ -83,6 +70,32 @@ class BubbleChart
       @counts[d.status]++
       @nodes.push node
 
+    @status_centers = {
+      "enqueued": {x: @width / 3, y: @height / 2},
+      "busy": {x: @width / 2, y: @height / 2},
+      "success": {x: 2 * @width / 3, y: (@height / 8) * 3.5},
+      "failed": {x: 2 * @width / 3, y: (@height / 8) * 4.5}
+    }
+
+    @status_nodes = [
+      {type: 'label', id: -1, radius: 36, status: 'enqueued', x: @status_centers['enqueued']['x'], y: @status_centers['enqueued']['y']},
+      #{type: 'label', id: -2, radius: 36, status: 'busy', x: @status_centers['busy']['x'], y: @status_centers['busy']['y']},
+      {type: 'label', id: -3, radius: 36, status: 'success', x: @status_centers['success']['x'], y: @status_centers['success']['y']},
+      {type: 'label', id: -4, radius: 36, status: 'failed', x: @status_centers['failed']['x'], y: @status_centers['failed']['y']}
+    ]
+
+    i = 1
+    padd = @height / 4
+    step = (@height / 2) / (@workers.length+1)
+    @workers.forEach (worker) =>
+      @status_centers[worker] = {x: @status_centers['busy']['x'], y: (step*i + padd)}
+
+      @status_nodes.push(
+        {type: 'label', id: (-4 - i), radius: 18, status: worker, x: @status_centers['busy']['x'], y: step*i}
+      )
+      i++
+
+    console.log('status_nodes', @status_nodes)
     console.log('workers', @workers)
     @status_nodes.forEach (node) =>
       @nodes.push node
@@ -92,12 +105,9 @@ class BubbleChart
       .attr("class", "bubbles")
       .attr("width", @width)
       .attr("height", @height)
-      #.attr("id", "svg_bubbles")
 
     @all_gs = @bubbles.selectAll("g")
       .data(@nodes, (d) -> d.id)
-    #@statuses = @bubbles.selectAll("text")
-      #.data(@status_nodes, (d) -> d.status)
 
     @gs = @all_gs.enter().append("g")
       .attr("class", (d) => d.type)
@@ -109,8 +119,6 @@ class BubbleChart
 
     @gs.selectAll("circle.job")
         .attr("class", (d) => d.type + " " + d.status)
-        #.attr("stroke-width", 2)
-        #.attr("stroke", (d) => 'rgba(0,0,0,0.01)')
         .attr("id", (d) -> "bubble_#{d.id}")
         .on("mouseover", (d,i) -> that.show_details(d,i,this))
         .on("mouseout", (d,i) -> that.hide_details(d,i,this))
@@ -118,52 +126,18 @@ class BubbleChart
     @texts = @gs.filter('.label').append("text")
       .text((d) => d.status)
       .attr("text-anchor", "middle")
-      #.attr("fill", "rgba(0,0,0,0.6)")
       .attr("y", 20)
 
     @texts = @gs.filter('.label').append("text")
       .attr("class", "count")
       .text((d) => @counts[d.status])
       .attr("text-anchor", "middle")
-      #.attr("fill", "rgba(0,0,0,0.6)")
       .attr("y", 0)
 
-      #.attr("x", (d) => @status_centers[d.status]['x'] )
-      #.attr("y", (d) => @status_centers[d.status]['y'] )
-
-    #@circles.push circle
 
     # used because we need 'this' in the
     # mouse callbacks
     that = this
-
-    # radius will be set to 0 initially.
-    # see transition below
-    #@circles.enter()
-      #.append("circle")
-        #.attr("r", 0)
-        #.attr("fill", (d) => @fill_color(d.status))
-        #.attr("stroke-width", 2)
-        #.attr("stroke", (d) => 'rgba(0,0,0,0.05)')
-        ##.attr("id", (d) -> "bubble_#{d.id}")
-        #.on("mouseover", (d,i) -> that.show_details(d,i,this))
-        #.on("mouseout", (d,i) -> that.hide_details(d,i,this))
-        #.append("text")
-          #.text("h")
-          #.attr("text-anchor", "middle")
-          #.attr("stroke", (d) => 'rgba(0,0,0,0.05)')
-
-
-    #@circles.enter().append("text")
-      #.attr("class", "status")
-      #.attr("x", (d) => statuses_x[d] )
-      #.attr("y", 40)
-      #.attr("text-anchor", "middle")
-      #.text((d) -> d)
-
-    # Fancy transition to make bubbles appear, ending with the
-    # correct radius
-    #@gs.transition().duration(1000).attr("r", (d) -> d.radius)
 
 
   # Charge function that is called for each node.
@@ -226,27 +200,17 @@ class BubbleChart
 
     @force.start()
 
+  target_for: (d) =>
+    if d.status == 'busy' then @status_centers[d.worker] else @status_centers[d.status]
 
-  move_text_towards_status: (alpha) =>
-    (d) =>
-
-      target = {x: 100, y: 100}
-      #@status_centers[d.status]
-      d.x ?= 0
-      d.y ?= 0
-      d.x = d.x + (target.x - d.x) * (@damper + 0.02) * alpha * 1.1
-      d.y = d.y + (target.y - d.y) * (@damper + 0.02) * alpha * 1.1
-
-
-  # move all circles to their associated @status_centers
   move_towards_status: (alpha) =>
     (d) =>
 
-      target = @status_centers[d.status]
+      target = @target_for(d)
       #target = {x: 500, y: 200}
       d.x ?= 0
       d.y ?= 0
-
+      console.log('x', d.x, target.x)
       d.x = d.x + (target.x - d.x) * (@damper + 0.02) * alpha * 1.1
       d.y = d.y + (target.y - d.y) * (@damper + 0.02) * alpha * 1.1
 
