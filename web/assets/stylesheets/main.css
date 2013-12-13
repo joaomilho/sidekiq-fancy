@@ -1387,6 +1387,23 @@ h1 {
   margin: 0 0 0 100px;
   line-height: 80px; }
 
+ul.btn-group {
+  position: absolute;
+  right: 310px;
+  top: 10px; }
+  ul.btn-group li {
+    float: left; }
+  ul.btn-group button {
+    border-radius: 0;
+    background: none;
+    border: none;
+    color: rgba(0, 0, 0, 0.9);
+    font-weight: normal;
+    text-shadow: none;
+    /*margin: 5px;*/ }
+    ul.btn-group button:active, ul.btn-group button.active {
+      background: rgba(0, 0, 0, 0.25); }
+
 #inspector {
   width: 300px;
   background: rgba(0, 0, 0, 0.1);
